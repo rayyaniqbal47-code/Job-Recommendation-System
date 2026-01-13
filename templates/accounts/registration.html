@@ -83,7 +83,7 @@
                     <input type="submit" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold text-lg mb-6">
                     
                     <div class="text-center">
-                        <p class="text-gray-600">Already have an account? <a href="#login" class="text-blue-500 hover:text-blue-700 transition-colors duration-300 font-semibold">Sign in here</a></p>
+                        <p class="text-gray-600">Already have an account? <a href="{% url 'login' %}" class="text-blue-500 hover:text-blue-700 transition-colors duration-300 font-semibold">Login</a></p>
                     </div>
 
                     {% include "tut/message.html" %}

@@ -8,7 +8,7 @@ from adminsetup.models import Job
 
 class Experience(models.Model):
     profile = models.ForeignKey(CustomUserProfile, on_delete=models.CASCADE , null=True, blank=True)
-    company_name = models.CharField(max_length=255 , unique=True , blank=True, null=True)
+    company_name = models.CharField(max_length=255 , blank=True, null=True)
     role = models.CharField(max_length=255 , blank=True, null=True)
     years = models.FloatField(blank=True, null=True)
 

@@ -24,7 +24,7 @@
                 {% csrf_token %}
                 <div class="space-y-6">
                     <!-- Skill Name -->
-                    <div>
+                    <div class="w-full">
                         <label class="block text-gray-600 text-sm font-medium mb-2">
                             Skill Name *
                         </label>
@@ -41,6 +41,10 @@
                         Add Skill
                     </button>
                 </div>
+
+
+                {% include "tut/message.html" %}
+
             </form>
         </div>
     </div>
@@ -48,3 +52,32 @@
 <!-- ========== ADD SKILL PAGE - END ========== -->
 
 {% endblock content %}
+
+{% block script %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById("skill-name");
+
+    // Initialize Awesomplete
+    const awesomplete = new Awesomplete(input, {
+        minChars: 1,
+        autoFirst: true
+    });
+
+    // Fetch suggestions as user types
+    input.addEventListener("input", function () {
+        fetch("{% url 'skill_autocomplete' %}?q=" + encodeURIComponent(input.value))
+            .then(response => response.json())
+            .then(data => {
+                awesomplete.list = data; // update suggestions
+            });
+    });
+});
+</script>
+
+{% endblock script %}
+
+
+
+

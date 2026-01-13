@@ -68,20 +68,11 @@ def recommended_jobs_view(request):
     except CustomUserProfile.DoesNotExist:
         return redirect('edit_jobseekerprofile')
 
-    has_skills = user_profile.skills.exists()
-    has_experience = user_profile.total_years_of_experience > 0
-
-    if not has_skills and not has_experience:
-        recommended_jobs = []
-        message = "Add your skills and experience to get better job recommendations!"
-    else:
-        # Pass send_email=True to notify user about new job matches
-        recommended_jobs = recommend_jobs(user_profile, send_email=True)
-        message = None
+    recommended_jobs = recommend_jobs(user_profile)
 
     context = {
-        "recommended_jobs": recommended_jobs,
-        "message": message
+        "recommended_jobs": recommended_jobs["jobs"],
+        "message": recommended_jobs['message'],
     }
 
     return render(request, "tut/recommended_jobs.html", context)

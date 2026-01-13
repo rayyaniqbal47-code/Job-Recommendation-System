@@ -8,7 +8,18 @@
     <link rel="stylesheet" href="{% static 'src/output.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@4.0.1/dist/css/multi-select-tag.min.css">
+
+    <!-- Awesomplete CSS -->
+    <link rel="stylesheet" href="https://leaverou.github.io/awesomplete/awesomplete.css">
+
 </head>
+
+<style>
+.awesomplete {
+    width: 100% !important;
+}
+</style>
+
 <body class="bg-gray-50 font-sans">
 
     {% include "tut/header.html" %}
@@ -23,6 +34,9 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@4.0.1/dist/js/multi-select-tag.min.js"></script>
+
+    <script src="https://leaverou.github.io/awesomplete/awesomplete.min.js"></script>
+
 
     {% block script %}{% endblock script %}
 

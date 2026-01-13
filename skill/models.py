@@ -13,7 +13,7 @@ class Skill(models.Model):
     
 
     def save(self , *args , **kwargs):
-        self.name = self.name.lower()
+        self.name = self.name.strip().lower()
         super().save(*args , **kwargs) 
 
 

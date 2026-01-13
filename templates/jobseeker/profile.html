@@ -7,10 +7,11 @@
 <div id="jobseeker-profile" class="mb-12">
     <!-- Header with Back Button -->
     <div class="flex items-center mb-6">
-        <button class="flex items-center text-blue-500 hover:text-blue-700 transition-colors duration-300 mr-4">
-            <i class="fas fa-arrow-left mr-2"></i>
-            Back
-        </button>
+        <a href="{% url 'myAccount' %}"
+            class="flex items-center text-blue-500 hover:text-blue-700 transition-colors duration-300 mr-4">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Back
+        </a>
         <h2 class="text-2xl font-bold text-gray-800 text-center flex-1">{{profile.customuser.username}} Profile</h2>
     </div>
     
@@ -58,14 +59,20 @@
                     <div class="flex items-center">
                         <i class="fas fa-file-pdf text-red-500 text-2xl mr-3"></i>
                         <div>
-                            <p class="font-medium">{{profile.resume_filename}}</p>
+                            {% if profile.resume %}
+                                <p class="font-medium">{{profile.resume_filename}}</p>
+                            {% else %}
+                                <p class="font-medium">No resume uploaded</p>
+                            {% endif %}
+                            
                         </div>
                     </div>
                     <div class="flex space-x-2">
-                        <a href="{{ profile.resume.url }}" class="text-blue-500 hover:text-blue-700 transition-colors duration-300">
-                            <i class="fas fa-download"></i>
-                        </a>
-                        
+                        {% if profile.resume %}
+                            <a href="{{ profile.resume.url }}" class="text-blue-500 hover:text-blue-700 transition-colors duration-300">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

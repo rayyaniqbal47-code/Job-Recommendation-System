@@ -9,19 +9,20 @@ class SkillForm(forms.ModelForm):
 
         widgets = {
             'name': forms.TextInput(attrs={
-                'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300',
+                'class': 'block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300',
                 'placeholder': 'e.g. JavaScript, React, Python',
                 'id': 'skill-name'
             })
         }
 
 
-    def clean_name(self):
-        return self.cleaned_data['name'].strip().lower()
+
     
     def validate_unique(self):
         # Skip the unique check for name
         pass
+
+
 
 
 

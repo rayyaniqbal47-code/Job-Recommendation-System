@@ -30,18 +30,7 @@
                                 <p class="text-gray-600 mb-2">{{ item.job.company_name }}</p>
                                 <div class="flex flex-wrap gap-2 mb-3">
                                     <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">{{ item.job.job_type }}</span>
-                                    {% if item.job.salary_min and item.job.salary_max %}
-                                        <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">${{ item.job.salary_min }}k - ${{ item.job.salary_max }}k</span>
-                                    {% endif %}
-                                    {% if item.reason == "Skills match" %}
-                                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">Skills</span>
-                                    {% elif item.reason == "Experience match" %}
-                                        <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">Experience</span>
-                                    {% elif item.reason == "Both skills and experience" %}
-                                        <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">Skills & Experience</span>
-                                    {% else %}
-                                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">No Data</span>
-                                    {% endif %}
+                                    <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">${{ item.job.salary_min }}k - ${{ item.job.salary_max }}k</span>
                                 </div>
                                 <p class="text-gray-500 text-sm">Posted {{ item.job.posted_at|date:"M d, Y" }} • {{ item.job.city }}, {{ item.job.state }}</p>
                                 <p class="text-gray-500 text-sm mt-1">

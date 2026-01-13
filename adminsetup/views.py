@@ -11,6 +11,7 @@ from accounts.models import CustomUser
 from applications.models import Application
 from jobseeker.models import JobBookmark
 from easyaudit.models import CRUDEvent, LoginEvent, RequestEvent
+from adminsetup.utils import send_application_accept_or_reject_email
 
 # Create your views here.
 
@@ -117,7 +118,11 @@ def accept_application(request, pk):
     application = get_object_or_404(Application, id=pk)
     application.status = "accepted"
     application.save()
+    mail_subject = "Application Accepted"
+    email_template = "adminsetup/emails/application_accepted.html"
+    send_application_accept_or_reject_email(request , application=application , mail_subject=mail_subject , email_template=email_template)
     return redirect('applications')
+
 
 
 @login_required
@@ -126,6 +131,9 @@ def reject_application(request, pk):
     application = get_object_or_404(Application, id=pk)
     application.status = "rejected"
     application.save()
+    mail_subject = "Application Rejected"
+    email_template = "adminsetup/emails/application_rejected.html"
+    send_application_accept_or_reject_email(request , application=application , mail_subject=mail_subject , email_template=email_template)
     return redirect('applications')
 
 

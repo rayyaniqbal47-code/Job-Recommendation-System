@@ -24,6 +24,8 @@ urlpatterns = [
 
     path('profile/my_application/' , views.my_application , name='my_application'),
 
+    path("profile/skills/autocomplete/", views.skill_autocomplete, name="skill_autocomplete"),
+
 
 
 

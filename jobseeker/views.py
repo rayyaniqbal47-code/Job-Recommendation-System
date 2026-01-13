@@ -10,6 +10,7 @@ from skill.models import Skill
 from adminsetup.models import Job
 from applications.models import Application
 from django.contrib import messages
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -73,6 +74,7 @@ def edit_jobseekerprofile(request):
 def add_experience(request):
 
     if request.method == 'POST':
+        print("POST RECEIVED", request.POST)
         form = ExperienceForm(request.POST)
 
         if form.is_valid():
@@ -81,6 +83,8 @@ def add_experience(request):
             exp.profile = profile
             exp.save()
             return redirect('profile')
+        else:
+            print("FORM ERRORS:", form.errors)
     
     else:
         form = ExperienceForm()
@@ -195,24 +199,30 @@ def delete_education(request , pk):
 @login_required
 @user_passes_test(check_jobseeker_perms)
 def add_skill(request):
-    profile = CustomUserProfile.objects.get(customuser=request.user)
+    profile = get_object_or_404(CustomUserProfile, customuser=request.user)
 
     if request.method == "POST":
         form = SkillForm(request.POST)
         if form.is_valid():
-            skill_name = form.cleaned_data['name'].strip().lower()
+            skill_name = form.cleaned_data['name'].strip()
 
-            # Get or create the Skill object
-            skill, created = Skill.objects.get_or_create(name=skill_name)
+            if skill_name:
+                skill = Skill.objects.filter(name__iexact=skill_name).first()
 
-            # Add the skill to the profile if not already added
-            if not profile.skills.filter(id=skill.id).exists():
-                profile.skills.add(skill)
-                profile.save()
-
+                if not skill:
+                    
+                    skill = Skill.objects.create(name=skill_name)
+                
+                if profile.skills.filter(id=skill.id).exists():
+                    messages.warning(request, f"The skill '{skill_name}' is already in your profile.")
+                    return redirect('add_skill')
+                else:
+                    profile.skills.add(skill)
+                    messages.success(request, f"Skill '{skill_name}' added successfully!")
+            
+            
             return redirect('profile')
-        else:
-            print(form.errors)
+
 
     else:
         form = SkillForm()
@@ -220,15 +230,30 @@ def add_skill(request):
     return render(request, 'jobseeker/add_skill.html', {'form': form})
 
 
+@login_required
+@user_passes_test(check_jobseeker_perms)
+def skill_autocomplete(request):
+    q = request.GET.get("q", "").strip()  # get query from input
+    if q:
+        # case-insensitive search, max 10 results
+        skills = Skill.objects.filter(name__icontains=q).values_list("name", flat=True)[:10]
+    else:
+        skills = []
+    return JsonResponse(list(skills), safe=False)
+
 
 @login_required
 @user_passes_test(check_jobseeker_perms)
 def delete_skill(request , pk):
 
-    exp = get_object_or_404(Skill , pk=pk)
-    exp.delete()
+    profile = CustomUserProfile.objects.get(customuser=request.user)
+
+    skill = get_object_or_404(Skill , pk=pk)
+
+    profile.skills.remove(skill)
 
     return redirect('profile')
+
 
 @login_required
 @user_passes_test(check_jobseeker_perms)
