@@ -5,11 +5,10 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-HIGH_MATCH_THRESHOLD = 0.70
 
 
 def clean_skills(skill_list):
-    return ",".join(
+    return " ".join(
         skill.name.strip().lower()
         for skill in skill_list
     )
@@ -34,30 +33,47 @@ def notify_high_match_users(job):
     job_vector = job_matrix[job_index]
 
 
+    best_profile = []
+    best_score = 0
+
+
     for profile in profiles:
 
         score = score_job_for_user(job , profile , tfidf , job_vector)
 
-        if score >= HIGH_MATCH_THRESHOLD:
+        #print(profile.customuser.username, round(score, 2))
 
-            from_email = settings.DEFAULT_FROM_EMAIL
+        if score > best_score:
 
-            current_site = "127.0.0.1:8000"
+            best_score = score
 
-            mail_subject = f'New Job That Matches You: {job.title}'
+            best_profile = [profile]
 
-            email_template = "tut/emails/job_notification.html"
+        elif score == best_score and score > 0:
 
-            message = render_to_string(email_template , {
-                "user":profile.customuser.username,
-                "domain":current_site,
-                "job":job,
-            })
+            best_profile.append(profile)
 
-            to_email = profile.customuser.email
-            mail = EmailMessage(subject=mail_subject , body=message , from_email=from_email , to=[to_email])
-            mail.content_subtype = "html"
-            mail.send()
+            
+    for top_profile in best_profile:
+
+        from_email = settings.DEFAULT_FROM_EMAIL
+
+        current_site = "127.0.0.1:8000"
+
+        mail_subject = f'New Job That Matches You: {job.title}'
+
+        email_template = "tut/emails/job_notification.html"
+
+        message = render_to_string(email_template , {
+            "user":top_profile.customuser.username,
+            "domain":current_site,
+            "job":job,
+        })
+
+        to_email = top_profile.customuser.email
+        mail = EmailMessage(subject=mail_subject , body=message , from_email=from_email , to=[to_email])
+        mail.content_subtype = "html"
+        mail.send()
 
 
     

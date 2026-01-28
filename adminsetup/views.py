@@ -12,6 +12,7 @@ from applications.models import Application
 from jobseeker.models import JobBookmark
 from easyaudit.models import CRUDEvent, LoginEvent, RequestEvent
 from adminsetup.utils import send_application_accept_or_reject_email
+from tut.job_notification_system import notify_high_match_users
 
 # Create your views here.
 
@@ -27,9 +28,14 @@ def add_job(request):
             job = form.save(commit=False)
             job.save()
             form.save_m2m()
+
             timestamp = timezone.now().strftime('%Y%m%d%H%M%S')
             job.job_slug = f"{slugify(job.title)}-{job.pk}-{timestamp}"
+
             job.save()
+
+            notify_high_match_users(job)
+            
             return redirect('admin_dashboard')   
         else:
             print(form.errors)         
