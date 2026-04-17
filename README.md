@@ -28,11 +28,26 @@ The system helps job seekers discover suitable job opportunities by matching the
 - Users receive alerts for relevant job opportunities in real time, improving job discovery and engagement.
 
 ## Technologies Used
-- Python
-- Django
+
+### Frontend
 - HTML
 - CSS
 - JavaScript
+- Tailwind CSS
+
+### Backend
+- Python
+- Django 5.2.8
+
+### Database
+- PostgreSQL (psycopg2)
+
+### Machine Learning / Recommendation System
+- scikit-learn
+- pandas
+- numpy
+- scipy
+- joblib
 
 ## Core Concept
 - Content-Based Filtering:
